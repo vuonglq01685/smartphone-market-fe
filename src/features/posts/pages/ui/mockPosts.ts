@@ -1,0 +1,62 @@
+import type { PostItem } from "./types";
+
+const now = Date.now();
+const mins = (m: number) => new Date(now - m * 60_000).toISOString();
+
+export const mockPosts: PostItem[] = [
+    {
+        id: "1",
+        title: "iPhone 13 Pro Max 256GB - Máy zin đẹp",
+        brand: "Apple",
+        price: 17500000,
+        province: "TP.HCM",
+        district: "Q.1",
+        createdAt: mins(5),
+        accountLabel: "personal",
+        aiScore: 78,
+        escrowEnabled: true,
+        cosmetic: "95",
+        batteryPercent: 90,
+    },
+    {
+        id: "2",
+        title: "Samsung S23 Ultra 256GB - Fullbox - Bảo hành còn",
+        brand: "Samsung",
+        price: 19900000,
+        province: "Hà Nội",
+        district: "Cầu Giấy",
+        createdAt: mins(22),
+        accountLabel: "shop",
+        aiScore: 72,
+        escrowEnabled: false,
+        cosmetic: "99",
+        batteryPercent: 88,
+    },
+    {
+        id: "3",
+        title: "iPhone 12 128GB - Ép kính nhẹ - Giá tốt",
+        brand: "Apple",
+        price: 9800000,
+        province: "Đà Nẵng",
+        createdAt: mins(55),
+        accountLabel: "verified-shop",
+        aiScore: 85,
+        escrowEnabled: true,
+        cosmetic: "90",
+        batteryPercent: 86,
+    },
+    {
+        id: "4",
+        title: "Xiaomi 13T 256GB - Ngon bổ rẻ",
+        brand: "Xiaomi",
+        price: 8200000,
+        province: "TP.HCM",
+        district: "Thủ Đức",
+        createdAt: mins(95),
+        accountLabel: "personal",
+        aiScore: 60,
+        escrowEnabled: false,
+        cosmetic: "lt90",
+        batteryPercent: 82,
+    },
+];
