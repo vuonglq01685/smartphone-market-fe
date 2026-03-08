@@ -1,8 +1,8 @@
 export function StepHeader({
-                               step,
-                               total,
-                               title,
-                           }: {
+    step,
+    total,
+    title,
+}: {
     step: number;
     total: number;
     title: string;

@@ -1,19 +1,16 @@
+import { apiCall } from "@/services/apiService";
 import type { ReactNode } from "react";
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import { apiFetch } from "../utils/api";
 
 export type UserRole = "personal" | "shop" | "admin";
-
 export type AuthUser = {
     id: string;
     name?: string | null;
     phone?: string | null;
     role?: UserRole | string | null;
 };
-
 export type LoginPayload = { phone: string; password: string };
 export type RegisterPayload = { name: string; phone: string; password: string; role: "Personal" | "Shop" };
-
 export type AuthState = {
     user: AuthUser | null;
     token: string | null;
@@ -23,7 +20,6 @@ export type AuthState = {
     register: (payload: RegisterPayload) => Promise<void>;
     logout: () => void;
 };
-
 type LoginResponse = {
     accessToken?: string | null;
     expiresIn: number;
@@ -31,7 +27,6 @@ type LoginResponse = {
 };
 
 export const AuthContext = createContext<AuthState | null>(null);
-
 
 const LS_TOKEN = "spm_token";
 const LS_USER = "spm_user";
@@ -65,14 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isShop = normalizeRole(user?.role) === "shop";
 
     const login = useCallback(async (payload: LoginPayload) => {
-        const res = await apiFetch<LoginResponse>("/api/users/login", {
-            method: "POST",
-            body: JSON.stringify(payload),
-        });
-
+        const res: LoginResponse = await apiCall("POST", "/api/users/login", payload);
         const t = res.accessToken ?? "";
         if (!t) throw { status: 500, title: "Missing token", detail: "Login response missing accessToken" };
-
         const u: AuthUser = { ...res.user, role: normalizeRole(res.user?.role) };
         setToken(t);
         setUser(u);
@@ -81,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const register = useCallback(async (payload: RegisterPayload) => {
-        await apiFetch("/api/users", { method: "POST", body: JSON.stringify(payload) });
+        await apiCall("POST", "/api/users", payload);
         await login({ phone: payload.phone, password: payload.password });
     }, [login]);
 
@@ -99,4 +89,3 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-

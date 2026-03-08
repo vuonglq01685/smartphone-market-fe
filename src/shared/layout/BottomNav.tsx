@@ -43,11 +43,11 @@ export function BottomNav() {
 }
 
 function NavItem({
-                     to,
-                     label,
-                     active,
-                     emphasize,
-                 }: {
+    to,
+    label,
+    active,
+    emphasize,
+}: {
     to: string;
     label: string;
     active?: boolean;

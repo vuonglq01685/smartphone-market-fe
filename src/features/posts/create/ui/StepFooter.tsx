@@ -1,12 +1,12 @@
 export function StepFooter({
-                               step,
-                               total,
-                               onBack,
-                               onNext,
-                               onSubmit,
-                               canProceed,
-                               previewTitle,
-                           }: {
+    step,
+    total,
+    onBack,
+    onNext,
+    onSubmit,
+    canProceed,
+    previewTitle,
+}: {
     step: number;
     total: number;
     onBack: () => void;

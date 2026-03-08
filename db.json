@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 13 Pro Max",
+      "brand": "Apple",
+      "price": 22000000,
+      "condition": "new",
+      "image": "https://example.com/iphone13promax.jpg",
+      "description": "Điện thoại flagship mới nhất của Apple."
+    },
+    {
+      "id": 2,
+      "name": "Samsung Galaxy S23 Ultra",
+      "brand": "Samsung",
+      "price": 18000000,
+      "condition": "used",
+      "image": "https://example.com/s23ultra.jpg",
+      "description": "Màn hình lớn, camera siêu nét."
+    },
+    {
+      "id": 3,
+      "name": "Xiaomi Redmi Note 11",
+      "brand": "Xiaomi",
+      "price": 4000000,
+      "condition": "new",
+      "image": "https://example.com/redminote11.jpg",
+      "description": "Hệ điều hành MIUI, pin trâu, giá tốt."
+    }
+  ]
+}

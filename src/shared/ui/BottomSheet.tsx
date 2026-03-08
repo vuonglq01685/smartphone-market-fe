@@ -1,11 +1,11 @@
 import { useEffect, type ReactNode } from "react";
 
 export function BottomSheet({
-                                open,
-                                title,
-                                onClose,
-                                children,
-                            }: {
+    open,
+    title,
+    onClose,
+    children,
+}: {
     open: boolean;
     title: string;
     onClose: () => void;

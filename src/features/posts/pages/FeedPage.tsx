@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { PostCard } from "./ui/PostCard";
-import { mockPosts } from "./ui/mockPosts";
 import { useFilters } from "../../../app/store/filters";
 import { useUrlSyncFilters } from "../../../shared/hooks/useUrlSyncFilters";
 import { norm } from "../../../shared/utils/normalize";
+import { PostCard } from "./ui/PostCard";
+import { mockPosts } from "./ui/mockPosts";
 
 export function FeedPage() {
     useUrlSyncFilters();
@@ -48,7 +48,7 @@ export function FeedPage() {
     }, [f.q, f.province, f.district, f.brand, f.model, f.minPrice, f.maxPrice, f.cosmetic, f.batteryMin, f.sort]);
 
     return (
-        <div className="mx-auto max-w-[720px] px-3 py-3 space-y-2">
+        <div className="mx-auto max-w-219 px-3 py-3 space-y-2">
             <div className="text-[12px] text-ct-sub">{items.length} tin</div>
 
             {items.map((p) => (
