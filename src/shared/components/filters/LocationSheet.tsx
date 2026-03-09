@@ -6,9 +6,9 @@ export function LocationSheet({ open, onClose }: { open: boolean; onClose: () =>
     const f = useFilters();
     const { data } = useLocations();
 
-    const provinces = data ? ["Toàn quốc", ...data.map(item => item.province)] : ["Toàn quốc"];
+    const provinces = data ? ["Toàn quốc", ...data.map((item: { province: string }) => item.province)] : ["Toàn quốc"];
 
-    const selectedProvince = data?.find(item => item.province === f.province);
+    const selectedProvince = data?.find((item: { province: string }) => item.province === f.province);
     const districts = selectedProvince ? ["", ...selectedProvince.districts] : [];
 
     return (

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createPostSchema, type CreatePostForm } from "../create/schema";
+import { createPostSchema, type CreatePostForm, type ImageType } from "../create/schema";
 import { StepHeader } from "../create/ui/StepHeader";
 import { StepFooter } from "../create/ui/StepFooter";
 import { StepType } from "../create/steps/StepType";
@@ -14,6 +14,8 @@ import { StepImages } from "../create/steps/StepImages";
 import { StepDescription } from "../create/steps/StepDescription";
 import { StepEscrow } from "../create/steps/StepEscrow";
 import { validateStep } from "../create/validateStep";
+import { uploadImage, createPost } from "../services/postsApi";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 const TOTAL_STEPS = 7;
 
@@ -51,10 +53,24 @@ function requiredImageTypes(brand: string) {
     return base;
 }
 
+const IMAGE_KIND_MAP: Record<ImageType, number> = {
+    front: 1,
+    back: 2,
+    edge: 3,
+    imei: 4,
+    battery: 5,
+    other: 6,
+};
+const COSMETIC_MAP: Record<string, number> = { "99": 99, "95": 95, "90": 90, lt90: 1 };
+const SCREEN_MAP: Record<string, number> = { zin: 1, "ep-kinh": 2, thay: 3 };
+const ORIGIN_MAP: Record<string, number> = { "chinh-hang": 1, "xach-tay": 2, dung: 3 };
+
 export function CreatePostWizardPage() {
     const nav = useNavigate();
+    const auth = useAuth();
     const [step, setStep] = useState(1);
     const [stepError, setStepError] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const methods = useForm<CreatePostForm>({
         resolver: zodResolver(createPostSchema),
@@ -124,9 +140,62 @@ export function CreatePostWizardPage() {
             return;
         }
 
-        // ✅ Không render JSON bên dưới. Prototype: chỉ thông báo đơn giản.
-        alert("Đăng tin (prototype) thành công!");
-        nav("/");
+        const values = methods.getValues();
+        const user = auth?.user;
+        if (!user?.id) {
+            setStepError("Bạn cần đăng nhập để đăng tin.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const images: { kind: number; url: string; sortOrder: number }[] = [];
+            for (let i = 0; i < values.images.length; i++) {
+                const img = values.images[i];
+                const file = "file" in img ? (img as { file?: File }).file : undefined;
+                let url = "";
+                if (file) {
+                    const res = await uploadImage(file);
+                    url = res.publicUrl || res.key || "";
+                }
+                if (!url) continue;
+                images.push({
+                    kind: IMAGE_KIND_MAP[img.type],
+                    url,
+                    sortOrder: i,
+                });
+            }
+
+            const loc = values.location;
+            const cond = values.condition;
+            const province = loc.province === "Toàn quốc" ? "" : loc.province;
+
+            const payload = {
+                type: values.type === "sell" ? 1 : 2,
+                userId: user.id,
+                brand: values.brand,
+                model: values.model,
+                storageGb: values.storageGb,
+                price: values.price,
+                province: province || "Toàn quốc",
+                district: loc.district || "",
+                escrowEnabled: values.escrowEnabled,
+                description: values.description.trim(),
+                images,
+                cosmetic: COSMETIC_MAP[cond.cosmetic],
+                screen: SCREEN_MAP[cond.screen],
+                batteryPercent: cond.batteryPercent,
+                batteryStatus: cond.batteryOriginal ? 1 : 2,
+                origin: ORIGIN_MAP[cond.origin],
+            };
+
+            const { id } = await createPost(payload);
+            nav(id ? `/posts/${id}` : "/");
+        } catch (e) {
+            setStepError("Có lỗi xảy ra. Vui lòng thử lại.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -170,6 +239,7 @@ export function CreatePostWizardPage() {
                 onSubmit={onSubmit}
                 canProceed={canProceed}
                 previewTitle={v.brand && v.model ? `${v.brand} ${v.model}` : "Chưa chọn máy"}
+                isSubmitting={isSubmitting}
             />
         </div>
     );

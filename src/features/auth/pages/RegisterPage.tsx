@@ -18,7 +18,7 @@ export default function RegisterPage() {
     const [password, setPassword] = useState("");
     const [role, setRole] = useState<RegisterPayload["role"]>("Personal");
 
-    const [err, setErr] = useState<string | null>(null);
+    const [, setErr] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     async function onSubmit(e: FormEvent) {

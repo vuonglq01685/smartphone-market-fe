@@ -24,11 +24,14 @@ export function useUrlSyncFilters() {
     const f = useFilters();
 
     useEffect(() => {
-        f.set("q", sp.get("q") ?? "");
+        const qFromUrl = sp.get("q") ?? "";
+        f.set("q", qFromUrl);
+        f.set("qInput", qFromUrl);
         f.set("province", sp.get("province") ?? "Toàn quốc");
         f.set("district", sp.get("district") ?? "");
 
-        f.set("brand", sp.get("brand") ?? undefined);
+        const brandParam = sp.get("brand");
+        f.set("brands", brandParam ? brandParam.split(",").map((b) => b.trim()).filter(Boolean) : []);
         f.set("model", sp.get("model") ?? undefined);
 
         f.set("minPrice", toNum(sp.get("minPrice")));
@@ -48,7 +51,7 @@ export function useUrlSyncFilters() {
         if (f.province && f.province !== "Toàn quốc") next.province = f.province;
         if (f.district) next.district = f.district;
 
-        if (f.brand) next.brand = f.brand;
+        if (f.brands?.length) next.brand = f.brands.join(",");
         if (f.model) next.model = f.model;
 
         if (typeof f.minPrice === "number") next.minPrice = String(f.minPrice);
@@ -64,7 +67,7 @@ export function useUrlSyncFilters() {
         f.q,
         f.province,
         f.district,
-        f.brand,
+        f.brands,
         f.model,
         f.minPrice,
         f.maxPrice,

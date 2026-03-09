@@ -36,6 +36,7 @@ export const createPostSchema = z.object({
                 type: imageTypeEnum,
                 previewUrl: z.string().min(1),
                 name: z.string().optional(),
+                file: z.instanceof(File).optional(),
             })
         )
         .min(1),

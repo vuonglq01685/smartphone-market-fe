@@ -1,12 +1,8 @@
 import { FaMobileAlt } from "react-icons/fa";
-import { useFilters } from "../../app/store/filters";
-import { LocationPill } from "../ui/LocationPill";
 import { SearchBar } from "../ui/SearchBar";
 import { FiltersBar } from "./FiltersBar";
 
 export function TopBar() {
-    const f = useFilters();
-
     return (
         <header className="sticky top-0 z-30 bg-ct-yellow border-b shadow-sm">
             {/* Thanh trên */}
@@ -24,12 +20,9 @@ export function TopBar() {
                     </div>
                 </div>
             </div>
-            {/* Thanh dưới: Vị trí + bộ lọc */}
-            <div className="bg-white">
-                <div className="max-w-5xl mx-auto flex items-center gap-4 px-4 py-2 justify-center">
-                    <LocationPill
-                        label={f.province === "Toàn quốc" ? "Toàn quốc" : f.province}
-                    />
+            {/* Thanh dưới: Bộ lọc - căn giữa */}
+            <div className="bg-white border-t border-gray-100">
+                <div className="max-w-4xl mx-auto px-4">
                     <FiltersBar />
                 </div>
             </div>

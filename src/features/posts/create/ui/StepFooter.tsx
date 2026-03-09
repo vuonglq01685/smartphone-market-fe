@@ -6,6 +6,7 @@ export function StepFooter({
     onSubmit,
     canProceed,
     previewTitle,
+    isSubmitting = false,
 }: {
     step: number;
     total: number;
@@ -14,6 +15,7 @@ export function StepFooter({
     onSubmit: () => void;
     canProceed: boolean;
     previewTitle: string;
+    isSubmitting?: boolean;
 }) {
     const isLast = step === total;
 
@@ -48,13 +50,13 @@ export function StepFooter({
                             <button
                                 className={[
                                     "rounded-2xl px-3 py-3 text-[14px] font-extrabold active:scale-[.99]",
-                                    canProceed ? "bg-black text-white" : "bg-black/30 text-white/60 cursor-not-allowed",
+                                    canProceed && !isSubmitting ? "bg-black text-white" : "bg-black/30 text-white/60 cursor-not-allowed",
                                 ].join(" ")}
                                 onClick={onSubmit}
-                                disabled={!canProceed}
+                                disabled={!canProceed || isSubmitting}
                                 type="button"
                             >
-                                Đăng tin
+                                {isSubmitting ? "Đang đăng..." : "Đăng tin"}
                             </button>
                         )}
                     </div>

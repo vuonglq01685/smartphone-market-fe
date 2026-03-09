@@ -34,7 +34,7 @@ export function StepImages() {
         const url = URL.createObjectURL(file);
         const next = [
             ...images.filter((x) => x.type !== t),
-            { id: crypto.randomUUID(), type: t, previewUrl: url, name: file.name },
+            { id: crypto.randomUUID(), type: t, previewUrl: url, name: file.name, file },
         ];
         setImages(next);
     };
@@ -51,6 +51,7 @@ export function StepImages() {
             type: "other" as const,
             previewUrl: URL.createObjectURL(f),
             name: f.name,
+            file: f,
         }));
         setImages([...images, ...added]);
     };

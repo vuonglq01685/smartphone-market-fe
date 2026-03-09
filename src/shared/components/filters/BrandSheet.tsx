@@ -2,32 +2,35 @@ import { useFilters } from "@/app/store/filters";
 import { useBrands } from "@/hooks/useProducts";
 import { BottomSheet } from "@/shared/ui/BottomSheet";
 
-
 export function BrandSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-    const { data } = useBrands()
-
+    const { data } = useBrands();
     const f = useFilters();
+
     return (
-        <BottomSheet open={open} title="Chọn hãng" onClose={onClose}>
+        <BottomSheet open={open} title="Chọn hãng (có thể chọn nhiều)" onClose={onClose}>
             <div className="grid grid-cols-2 gap-2">
                 <button
                     className="rounded-2xl border border-ct-line px-3 py-2 text-[13px] font-semibold bg-white"
-                    onClick={() => f.set("brand", undefined)}
+                    onClick={() => f.set("brands", [])}
                 >
                     Tất cả hãng
                 </button>
-                {data && data.map((b) => (
-                    <button
-                        key={b}
-                        className={[
-                            "rounded-2xl border px-3 py-2 text-[13px] font-semibold",
-                            f.brand === b ? "border-ct-yellow bg-ct-yellow/20" : "border-ct-line bg-white",
-                        ].join(" ")}
-                        onClick={() => f.set("brand", b)}
-                    >
-                        {b}
-                    </button>
-                ))}
+                {data &&
+                    data.map((b: string) => {
+                        const selected = f.brands.includes(b);
+                        return (
+                            <button
+                                key={b}
+                                className={[
+                                    "rounded-2xl border px-3 py-2 text-[13px] font-semibold",
+                                    selected ? "border-orange-500 bg-orange-100 text-orange-700" : "border-ct-line bg-white",
+                                ].join(" ")}
+                                onClick={() => f.toggleBrand(b)}
+                            >
+                                {b}
+                            </button>
+                        );
+                    })}
             </div>
 
             <button

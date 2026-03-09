@@ -20,7 +20,7 @@ export function StepModel() {
     return (
         <div className="space-y-2">
             <div className="grid grid-cols-2 gap-2">
-                {models && models.map((m) => (
+                {models && models.map((m: string) => (
                     <button
                         key={m}
                         type="button"

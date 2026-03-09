@@ -1,0 +1,1 @@
+Bắt buộc dùng Functional Components và React Hooks. Sử dụng TypeScript chặt chẽ (strict: true). Quản lý state bằng Zustand hoặc Redux Toolkit. Gọi API qua Axios hoặc Fetch API.

@@ -13,7 +13,7 @@ export default function LoginPage() {
 
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
-    const [err, setErr] = useState<string | null>(null);
+    const [, setErr] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     async function onSubmit(e: FormEvent) {
